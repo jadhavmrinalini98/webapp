@@ -71,7 +71,7 @@ Step 1: 1. Clone the repository or download and unzip the source repository.
 
 Step 2: Create appropriate files in the IDE and write the code.
 
-Step 3: Download the node modules and install dependancies. Start Server through command npm start. Open Postman to Test the API's
+Step 3: Download the node modules and install dependencies. Start Server through command npm start. Open Postman to Test the API's
 
 Step 4: Check the Database after each and every API is called to see the status in Database.
 
@@ -81,13 +81,13 @@ Step 5: Verify the status codes returned by API as per requirements
 ## Test the Service
 To check the service is up visit
 
-http://localhost:4005/healthz/, where you should see: "200 OK".
+http://localhost:3000/healthz/, where you should see: "200 OK".
 
-http://localhost:4005/v1/user/ where you should see: "201 Created".
+http://localhost:3000/v1/user/ where you should see: "201 Created".
 
-http://localhost:4005/v1/user/self/ where you should see: "204 No Content".
+http://localhost:3000/v1/user/self where you should see: "204 No Content".
 
-http://localhost:4005/v1/user/self where you should use: "204 No Content".
+http://localhost:3000/v1/user/self where you should use: "204 No Content".
 
 ## Contributing
 Contributions are always welcome. Please create a pull request with a detailed description of changes.
