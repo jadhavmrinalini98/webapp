@@ -1,4 +1,4 @@
-const dbFuncs = require('../models/dbFunctions');
+const db = require('../config/dbSetup');
 
 const helper = require('../config/helper');
 
@@ -31,28 +31,38 @@ const createNewUser = async (req, res) => {
     let uName = req.body.username;
     let pass = await helper.createPassHash(req.body.password);
 
-    let result = await dbFuncs.getUserDataCredentials(uName);
-    if (result) {
+    let resultant = await db.user.findOne({where: {username:uName}, attributes: ['password']});
+    if (resultant?.dataValues?.password) {
         return res.status(400).json({
             message: "Bad request"
         });
     }
 
-    let data = await dbFuncs.addNewUser(fName, lName, uName, pass);
+    try{
+        let data = await db.user.create({
+            first_name:fName,
+            last_name: lName,
+            username: uName,
+            password: pass,
+            account_created: new Date().toISOString(),
+            account_updated: new Date().toISOString()
+        });
 
-    let userResult = {
-        id:data.id,
-        username: data.username,
-        first_name:data.first_name,
-        last_name:data.last_name,
-        account_created:data.account_created,
-        account_updated:data.account_updated
+        let result = {
+            id:data.dataValues.id,
+            username: data.dataValues.username,
+            first_name:data.dataValues.first_name,
+            last_name:data.dataValues.last_name,
+            account_created:data.dataValues.account_created,
+            account_updated:data.dataValues.account_updated
+        }
+        return res.status(201).json(result);
+    }catch(err) {
+        console.log("DB Error");
     }
-    return res.status(201).json(userResult); 
-
-
-   
 }
+
+
 
 const getUser = async (req, res) => {
     check = true;
@@ -72,21 +82,25 @@ const getUser = async (req, res) => {
 
     let id = req.params.id;
 
-    let result = await dbFuncs.getUserData(id);
-    if (!result) {
-        return res.status(400).json({
-          message: "Bad Request"});
+    try{
+        let result = await db.user.findOne({where:{id:id}});
+        if (!result) {
+            return res.status(400).json({
+              message: "Bad Request"});
+        }
+        let fResult = {
+            id:result.id,
+            username: result.username,
+            first_name:result.first_name,
+            last_name:result.last_name,
+            account_created:result.account_created,
+            account_updated:result.account_updated
+        }
+    
+        return res.status(200).json(fResult); 
+    }catch(err) {
+        console.log("DB Error");
     }
-    let fResult = {
-        id:result.id,
-        username: result.username,
-        first_name:result.first_name,
-        last_name:result.last_name,
-        account_created:result.account_created,
-        account_updated:result.account_updated
-    }
-
-    return res.status(200).json(fResult); 
 
     
 }
@@ -123,22 +137,22 @@ const updateUser = async (req, res) => {
     
     let pass = await helper.createPassHash(req.body.password);
 
-    await dbFuncs.updateUserData(fName, lName, pass, id)
-    return res.status(204).send(); 
+    try{
+        await db.user.update({
+            first_name:fName, 
+            last_name:lName, 
+            password:pass
+        },{
+            where:{
+                id:id
+            }
+        })
+        return res.status(204).send(); 
+    }catch(err) {
+        console.log('DB Error');
+    }
 
-    // dbFuncs.setConnection();
-
-    // await dbFuncs.updateUserData(fName, lName, uName, pass, id)
-    // .then((result) => {
-    //     dbFuncs.endConnection();
-    //     return res.status(204).send(); 
-    // })    
-    // .catch((err) => {
-    //     dbFuncs.endConnection();
-    //     return res.status(500).json({
-    //         message: "Database Error"
-    //     });
-    // })
+    
 }
 module.exports = {
     createNewUser,

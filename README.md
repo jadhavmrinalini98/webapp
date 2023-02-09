@@ -48,6 +48,16 @@ PUT - http://localhost:3000/v1/user/{id}
 
 GET - http://localhost:3000/v1/user/{id}
 
+GET - http://localhost:3000/v1/product/{id}
+
+POST - http://localhost:3000/v1/product/
+
+PUT - http://localhost:3000/v1/product/{id}
+
+PATCH - http://localhost:3000/v1/product/{id}
+
+
+
 
 ## Responds with following HTTP messages
 
@@ -88,6 +98,10 @@ http://localhost:3000/v1/user/ where you should see: "201 Created".
 http://localhost:3000/v1/user/self where you should see: "204 No Content".
 
 http://localhost:3000/v1/user/self where you should use: "204 No Content".
+
+http://localhost:3000/v1/product/self where you should see: "204 No Content".
+
+http://localhost:3000/v1/product/self where you should use: "204 No Content".
 
 ## Contributing
 Contributions are always welcome. Please create a pull request with a detailed description of changes.
