@@ -6,9 +6,9 @@ var helper = require('../config/helper');
 
 router.post('/', user.createNewUser);
 
-router.get('/:id', helper.bAuthCheck, user.getUser);
+router.get('/:id', helper.uAuthCheck, user.getUser);
 
-router.put('/:id', helper.bAuthCheck, user.updateUser);
+router.put('/:id', helper.uAuthCheck, user.updateUser);
 
 
 

@@ -1,7 +1,7 @@
 {
   "name": "webapp",
   "version": "1.0.0",
-  "description": "",
+  "description": "## Introduction Node.js is a server-side JavaScript runtime environment. It allows developers to build fast and scalable network applications.",
   "main": "app.js",
   "scripts": {
     "test": "jest",
@@ -17,6 +17,8 @@
     "jest": "^29.4.1",
     "method-override": "^3.0.0",
     "mysql2": "^3.1.0",
+    "nodemon": "^2.0.20",
+    "sequelize": "^6.28.0",
     "supertest": "^6.3.3"
   }
 }
