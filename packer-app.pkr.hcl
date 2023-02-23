@@ -5,7 +5,7 @@ variable "aws_region" {
 #take it from ami catlog amazon linux 
 variable "source_ami" {
   type    = string
-  default = "ami-0dfcb1ef8550277af " # Ubuntu 22.04 LTS
+  default = "ami-0dfcb1ef8550277af" # Ubuntu 22.04 LTS
 }
 
 variable "ssh_username" {
