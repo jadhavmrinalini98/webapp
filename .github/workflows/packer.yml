@@ -19,7 +19,6 @@ jobs:
       PKR_VAR_DBPORT: ${{ secrets.DBPORT }}
       PKR_VAR_PORT: ${{ secrets.PORT }}
       PKR_VAR_DATABASE: ${{ secrets.DATABASE }}
-    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
