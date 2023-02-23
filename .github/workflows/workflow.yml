@@ -23,3 +23,26 @@ jobs:
       - run: npm install
       - run: npm install jest
       - run: npm run test
+  packer-validate:
+    name: Packer Validate
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      PKR_VAR_DBUSER: ${{ secrets.DBUSER }}
+      PKR_VAR_DBPASS: ${{ secrets.DBPASS }}
+      PKR_VAR_DBHOST: ${{ secrets.DBHOST }}
+      PKR_VAR_DBPORT: ${{ secrets.DBPORT }}
+      PKR_VAR_PORT: ${{ secrets.PORT }}
+      PKR_VAR_DATABASE: ${{ secrets.DATABASE }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Create zip archive
+        run: zip -r webapp.zip .
+      - name: Install Packer
+        run: sudo apt-get update && sudo apt-get install -y packer
+      - name: Packer Init
+        run: packer init .
+      - name: Packer Validate - Branches
+        run: packer validate .
