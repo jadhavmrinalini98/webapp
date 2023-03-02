@@ -20,12 +20,12 @@ variable "vpc_id" {
 
 variable "subnet_id" {
   type    = string
-  default = "subnet-051481c62c6ff86a6"
+  default = "subnet-003d2c8891385ccd3"
 }
 
 variable "ami_users" {
   type    = list(string)
-  default = ["680696435068"]
+  default = ["448698978168","325191631035"]
 }
 
 source "amazon-ebs" "app-ami" {

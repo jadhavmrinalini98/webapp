@@ -19,6 +19,7 @@ router.delete('/:id', helper.pAuthCheck, product.deleteProduct);
 
 router.post('/:id/image', helper.pAuthCheck, image.upload);
 router.get('/:id/image/:imageId', helper.pAuthCheck, helper.imAuth, image.getImageMeta);
+router.get('/:id/image', helper.pAuthCheck, image.getAllImages);
 router.delete('/:id/image/:imageId', helper.pAuthCheck, helper.imAuth, image.delImage);
 
 module.exports = router;
