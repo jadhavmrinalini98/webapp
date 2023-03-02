@@ -15,7 +15,7 @@ variable "ssh_username" {
 
 variable "vpc_id" {
   type    = string
-  default = "vpc-01276ec252f7960ce"
+  default = "vpc-0b3c3578ed755bb3b"
 }
 
 variable "subnet_id" {
