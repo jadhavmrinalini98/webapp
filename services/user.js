@@ -1,10 +1,14 @@
+const helper = require('../config/helper');
 const db = require('../config/dbSetup');
 
-const helper = require('../config/helper');
-
-const createNewUser = async (req, res) => {
+const createNewUser = async ( req, res) => {
+    //Check if req object is correct and throw err as approriate.
     let check = true;
     if(!req.body.first_name) {
+        check = false;
+    }
+
+    if(!req.body.last_name) {
         check = false;
     }
 
@@ -13,10 +17,6 @@ const createNewUser = async (req, res) => {
     }
 
     if(!req.body.password) {
-        check = false;
-    }
-
-    if(!req.body.last_name) {
         check = false;
     }
 
@@ -59,16 +59,13 @@ const createNewUser = async (req, res) => {
         return res.status(201).json(result);
     }catch(err) {
         console.log("DB Error");
+        res.status(400).send("Bad Request");
     }
 }
 
-
-
 const getUser = async (req, res) => {
+    //Check if req object is correct and throw err as approriate.
     check = true;
-    if(!req.params.id) {
-        check = false;
-    }
 
     if (Object.keys(req.body).length){
         check = false;
@@ -100,14 +97,13 @@ const getUser = async (req, res) => {
         return res.status(200).json(fResult); 
     }catch(err) {
         console.log("DB Error");
+        res.status(400).send("Bad Request");
     }
-
-    
 }
 
 const updateUser = async (req, res) => {
+    //Check if req object is correct and throw err as approriate
     let check = true;
-   
 
     if(!req.body.first_name) {
         check = false;
@@ -150,10 +146,10 @@ const updateUser = async (req, res) => {
         return res.status(204).send(); 
     }catch(err) {
         console.log('DB Error');
+        res.status(400).send("Bad Request");
     }
-
-    
 }
+
 module.exports = {
     createNewUser,
     getUser,

@@ -71,13 +71,28 @@ const pAuthCheck = async (req, res, next) => {
   } 
 
   if(id) {
-    //Check if user creds match the user at id.
+    //Check if user creds match the product at id.
     let dbCheck = await dbProdVal(userName, pass,id);
     if(dbCheck) {
         return res.status((dbCheck=='Forbidden')?403:404).json({
           message: dbCheck,
         });
     } 
+  }
+
+  next();
+}
+
+const imAuth = async (req, res, next) => {
+  const id = req?.params?.id;
+  const imageId = req?.params?.imageId;
+
+  let imageObj = await db.image.findOne({where: {product_id: id, image_id: imageId}});
+
+  if(!imageObj) {
+    return res.status(404).json({
+      message: "Not Found",
+    });
   }
 
   next();
@@ -136,6 +151,16 @@ const dbCredVal = async (uName, pass, id) => {
   return '';
 }
 
+const checkFileType = (type) => {
+  let fileTypes = ['png', 'jpeg', 'jpg', 'gif'];
+
+  if(fileTypes.includes(type)) {
+    return true;
+  }
+
+  return false;
+}
+
 module.exports = {
     createPassHash,
     uAuthCheck,
@@ -143,5 +168,7 @@ module.exports = {
     validateEmail,
     validUser,
     getDecryptedCreds,
-    pAuthCheck
+    pAuthCheck,
+    imAuth,
+    checkFileType
 }

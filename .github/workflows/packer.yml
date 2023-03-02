@@ -13,12 +13,6 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      PKR_VAR_DBUSER: ${{ secrets.DBUSER }}
-      PKR_VAR_DBPASS: ${{ secrets.DBPASS }}
-      PKR_VAR_DBHOST: ${{ secrets.DBHOST }}
-      PKR_VAR_DBPORT: ${{ secrets.DBPORT }}
-      PKR_VAR_PORT: ${{ secrets.PORT }}
-      PKR_VAR_DATABASE: ${{ secrets.DATABASE }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
@@ -27,6 +21,6 @@ jobs:
       - name: Install Packer
         run: sudo apt-get update && sudo apt-get install -y packer
       - name: Packer Init
-        run: packer init .
+        run: packer init packer
       - name: Packer Build - Branches
-        run: packer build .
+        run: packer build packer
