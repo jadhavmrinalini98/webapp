@@ -23,5 +23,4 @@ jobs:
       - name: Packer Init
         run: packer init packer
       - name: Packer Build - Branches
-        if: github.event.pull_request.merged == true
         run: packer build packer
