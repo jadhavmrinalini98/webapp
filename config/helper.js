@@ -151,6 +151,16 @@ const dbCredVal = async (uName, pass, id) => {
   return '';
 }
 
+const checkFileType = (type) => {
+  let fileTypes = ['png', 'jpeg', 'jpg', 'gif'];
+
+  if(fileTypes.includes(type)) {
+    return true;
+  }
+
+  return false;
+}
+
 module.exports = {
     createPassHash,
     uAuthCheck,
@@ -159,5 +169,6 @@ module.exports = {
     validUser,
     getDecryptedCreds,
     pAuthCheck,
-    imAuth
+    imAuth,
+    checkFileType
 }
