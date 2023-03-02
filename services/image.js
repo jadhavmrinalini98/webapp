@@ -109,6 +109,11 @@ const delImage = async (req, res) => {
         var params = { Bucket: BUCKET_NAME, Key: bucketPath };
 
         await s3.deleteObject(params).promise();
+        await db.image.destroy({
+            where:{
+                image_id:id
+            }
+        })
 
         return res.status(204).send(); 
     }catch(err) {
