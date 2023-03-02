@@ -11,7 +11,7 @@ const createImageModel = (sequelize) => {
         file_name: {
             type: DataTypes.STRING,
         },
-        date_added: {
+        date_created: {
             type: DataTypes.DATE
         },
         s3_bucket_path: {
@@ -20,7 +20,7 @@ const createImageModel = (sequelize) => {
     },
     {
         updatedAt: 'date_last_updated',
-        createdAt: 'date_added',
+        createdAt: 'date_created',
     },
     {
         initialAutoIncrement: 1,
