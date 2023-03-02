@@ -28,7 +28,7 @@ const createProductModel = (sequelize) => {
                 max: 100
             }
         },
-        date_added: {
+        date_created: {
             type: DataTypes.DATE,
             allowNull: false
         },
@@ -43,7 +43,7 @@ const createProductModel = (sequelize) => {
     },
     {
         updatedAt: 'date_last_updated',
-        createdAt: 'date_added',
+        createdAt: 'date_created',
     },
     {
         initialAutoIncrement: 1,
