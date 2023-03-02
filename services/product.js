@@ -6,8 +6,8 @@ const createNewProduct = async (req, res) => {
     !req.body.description || 
     !req.body.sku || 
     !req.body.manufacturer ||
-    !req.body.quantity ||
-    (req.body.quantity && (req.body.quantity < 0 || typeof req.body.quantity === 'string'|| req.body.quantity > 100))) {
+    req.body.quantity===null ||
+    (req.body.quantity && (req.body.quantity < 0 || typeof req.body.quantity === 'string' || req.body.quantity > 100))) {
         return res.status(400).json({
             message: "Bad request"
         });
@@ -51,13 +51,14 @@ const createNewProduct = async (req, res) => {
         res.status(400).send("Bad Request");
     }
 }
-const putProduct = async (req, res) => {
+
+const putProductInfo = async (req, res) => {
     if(!req.body.name || 
     !req.body.description || 
     !req.body.sku || 
     !req.body.manufacturer ||
-    !req.body.quantity ||
-    (req.body.quantity && (req.body.quantity < 0 || typeof req.body.quantity === 'string'|| req.body.quantity > 100 )) ||
+    req.body.quantity===null ||
+    (req.body.quantity && (req.body.quantity < 0 || typeof req.body.quantity === 'string' || req.body.quantity > 100)) ||
     Object.keys(req.body).length > 5) {
         return res.status(400).json({
             message: "Bad request"
@@ -92,7 +93,7 @@ const putProduct = async (req, res) => {
     }
 }
 
-const patchProduct = async (req, res) => {
+const patchProductInfo = async (req, res) => {
     if((req.body.quantity && (req.body.quantity < 0 || typeof req.body.quantity === 'string' || req.body.quantity > 100))) {
         return res.status(400).json({
             message: "Bad request"
@@ -106,7 +107,7 @@ const patchProduct = async (req, res) => {
     
     let nullCheck = false;
     Object.keys(req.body).forEach((key) => {
-        if(!req.body[key]) {
+        if(!req.body[key] && req.body[key] !== 0) {
             nullCheck = true;
         }
         if(fieldKeys.includes(key)) {
@@ -119,15 +120,14 @@ const patchProduct = async (req, res) => {
     }
 
     try{
-        if(req.body.sku){
-        let prodObj = await db.product.findOne({where:{sku:req.body.sku}});
-        if(prodObj && prodObj.dataValues.id != id) {
-            return res.status(400).json({
-                message: "Bad request!! The entered sku value already exists."
-            });
+        if(req.body.sku) {
+            let prodObj = await db.product.findOne({where:{sku:req.body.sku}});
+            if(prodObj && prodObj.dataValues.id != id) {
+                return res.status(400).json({
+                    message: "Bad request!! The entered sku value already exists."
+                });
+            }
         }
-    }
-        
 
         await db.product.update(fieldData,{
             where:{
@@ -143,7 +143,7 @@ const patchProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
 
-    if(req._body){
+    if(req._body) {
         return res.status(400).send("Bad Request");
     }
 
@@ -158,14 +158,16 @@ const deleteProduct = async (req, res) => {
         return res.status(204).send(); 
     }catch(err) {
         console.log("DB Error ", err);
+        res.status(400).send("Bad Request");
     }
 }
 
 const getProduct = async(req, res) => {
-    let id = req.params.id;
-    if(req._body){
+    if(req._body) {
         return res.status(400).send("Bad Request");
     }
+    
+    let id = req.params.id;
 
     try{
         let data = await db.product.findOne({
@@ -198,8 +200,8 @@ const getProduct = async(req, res) => {
 
 module.exports = {
     createNewProduct,
-    putProduct,
-    patchProduct,
     deleteProduct,
-    getProduct
+    getProduct,
+    putProductInfo,
+    patchProductInfo
 }

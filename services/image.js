@@ -4,24 +4,17 @@ const path = require("path");
 const AWS = require('aws-sdk');
 const uploadFile = require("../middleware/upload");
 const db = require('../config/dbSetup');
-
-// const ID = 'AKIAZ47FLKF6IMH2LM62';
-// const SECRET = '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';
-
-// The name of the bucket that you have created
 const BUCKET_NAME = process.env.BUCKETNAME;
 
+const helper = require('../config/helper')
+
 const s3 = new AWS.S3()
-// ({
-//     accessKeyId: ID,
-//     secretAccessKey: SECRET
-// });
 
 const upload = async (req,res) => {
     try {
         await uploadFile(req, res);
     
-        if (req.file == undefined) {
+        if (req.file == undefined || !helper.checkFileType(req.file.mimetype.split('/')[1])) {
           return res.status(400).send({ message: "Bad Request!! Please upload a file." });
         }
 
@@ -32,7 +25,7 @@ const upload = async (req,res) => {
         // Setting up S3 upload parameters
         const uploadParams = {
             Bucket: BUCKET_NAME,
-            Key: key, // File name you want to save as in S3
+            Key: key,
             Body: fileContent
         };
     
@@ -48,12 +41,6 @@ const upload = async (req,res) => {
               });
             }
         });
-
-        // var metaParams = {                
-        //     Bucket: BUCKET_NAME,                
-        //     Key: key               
-        // };                
-        // let metadata = await s3.headObject(metaParams).promise();
 
         let product = await db.product.findOne({where:{id: req.params.id}})
         
@@ -130,8 +117,33 @@ const delImage = async (req, res) => {
     }
 }
 
+const getAllImages = async (req, res) => {
+    let id = req.params.id;
+
+    try {
+        let data = await db.image.findAll({
+            where:{
+                product_id:id
+            }
+        });
+
+        let result = [];
+
+        data.forEach(res => {
+            delete res.dataValues.date_last_updated
+            result.push(res.dataValues);
+        });
+
+        return res.status(200).json(result); 
+    }catch(err) {
+        console.log("DB Error ", err);
+        res.status(400).send("Bad Request");
+    }
+}
+
 module.exports = {
     upload,
     getImageMeta,
-    delImage
+    delImage,
+    getAllImages
 }
