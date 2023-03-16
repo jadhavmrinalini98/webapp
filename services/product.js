@@ -1,5 +1,9 @@
 const helper = require('../config/helper');
 const db = require('../config/dbSetup');
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
+const BUCKET_NAME = process.env.BUCKETNAME;
+
 
 const createNewProduct = async (req, res) => {
     if(!req.body.name || 
@@ -150,6 +154,20 @@ const deleteProduct = async (req, res) => {
     let id = req.params.id;
 
     try{
+        let data = await db.image.findAll({
+            where:{
+                product_id:id
+            }
+        });
+        console.log(data);
+        data.forEach(async (d) => {
+            console.log(d);
+            let bucketPath = d.s3_bucket_path;
+
+            var params = { Bucket: BUCKET_NAME, Key: bucketPath };
+
+            await s3.deleteObject(params).promise();
+        })
         await db.product.destroy({
             where:{
                 id:id
