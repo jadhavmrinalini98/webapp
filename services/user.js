@@ -1,5 +1,6 @@
 const helper = require('../config/helper');
 const db = require('../config/dbSetup');
+const logger = require("../config/logger");
 
 const createNewUser = async ( req, res) => {
     //Check if req object is correct and throw err as approriate.
@@ -47,6 +48,7 @@ const createNewUser = async ( req, res) => {
             account_created: new Date().toISOString(),
             account_updated: new Date().toISOString()
         });
+        logger.info("/create user 200");
 
         let result = {
             id:data.dataValues.id,
@@ -78,7 +80,7 @@ const getUser = async (req, res) => {
     }
 
     let id = req.params.id;
-
+    
     try{
         let result = await db.user.findOne({where:{id:id}});
         if (!result) {
@@ -93,7 +95,7 @@ const getUser = async (req, res) => {
             account_created:result.account_created,
             account_updated:result.account_updated
         }
-    
+        logger.info("/create user 200");
         return res.status(200).json(fResult); 
     }catch(err) {
         console.log("DB Error");

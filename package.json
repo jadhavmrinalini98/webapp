@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "app-root-path": "^3.1.0",
     "aws-sdk": "^2.1326.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
@@ -23,6 +24,7 @@
     "nodemon": "^2.0.20",
     "sequelize": "^6.28.0",
     "supertest": "^6.3.3",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "winston": "^3.8.2"
   }
 }
