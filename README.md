@@ -6,7 +6,7 @@ Node.js is a server-side JavaScript runtime environment. It allows developers to
 ## User Requirements
 
 
-1. As a user, I should be able to create new user by providing email address,password,first name, last name.
+1. As a user, I should be able to create new user by providing email address,password,first name and last name.
 2. account_created field for the user should be set to a current time when user creation is successful.
 3. Users should not be able to set values for account_created and account_updated. Any value provided for these fields must be ignored.Password should never be returned in the response payload.
 4. As a user, I expect to use my email address as my username.
