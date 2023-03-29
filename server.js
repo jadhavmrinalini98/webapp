@@ -2,6 +2,7 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 const methodOverride = require('method-override');
+const logger = require("./config/logger");
 
 app.use(bodyParser.json());
 
@@ -13,9 +14,10 @@ db.user.hasMany(db.product, {foreignKey: "owner_user_id"});
 db.product.hasMany(db.image, {foreignKey: "product_id"});
 db.sequelize.sync({force: false})
   .then(() => console.log("Database setup complete."))
-  .catch((err) => console.log("Database setup failed.", err))
+  .catch((err) => logger.error(`Database setup failed. - ${err}`))
 
 app.get('/healthz',function(req, res) {
+  logger.info("healthz working fine");
     res.status(200).send(); 
 });
 
