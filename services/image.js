@@ -11,6 +11,8 @@ const helper = require('../config/helper')
 const s3 = new AWS.S3()
 
 const upload = async (req,res) => {
+    helper.logger.info("POST - Image");
+    helper.statsdClient.increment('POST_image_counter');
     try {
         await uploadFile(req, res);
     
@@ -58,9 +60,10 @@ const upload = async (req,res) => {
             "date_created": imageObj.dataValues.date_created,
             "s3_bucket_path": imageObj.dataValues.s3_bucket_path
         }
-
+        helper.logger.info("Image Successfully added - ", result);
         res.status(201).json(result);
     } catch (err) {
+        helper.logger.error("DB Error - ", err);
         res.status(500).send({
           message: `Could not upload the file: ${req.file.originalname}. ${err}`,
         });
@@ -68,6 +71,8 @@ const upload = async (req,res) => {
 };
 
 const getImageMeta = async (req, res) => {
+    helper.logger.info("GET - Image for id - ", req.params.imageId);
+    helper.statsdClient.increment('GET_image_counter');
     let id = req.params.imageId;
 
     try{
@@ -77,6 +82,7 @@ const getImageMeta = async (req, res) => {
             }
         });
         if(!data) {
+            helper.logger.error("Image not found");
             return res.status(404).json({
                 message: "Not Found"
             });
@@ -88,14 +94,17 @@ const getImageMeta = async (req, res) => {
             "date_created": data.dataValues.date_created,
             "s3_bucket_path": data.dataValues.s3_bucket_path
         }
+        helper.logger.info("Image Successfully fetched - ", result);
         return res.status(200).json(result); 
     }catch(err) {
-        console.log("DB Error ", err);
+        helper.logger.error("DB Error - ", err);
         res.status(400).send("Bad Request");
     }
 }
 
 const delImage = async (req, res) => {
+    helper.logger.info("DELETE - Image for id - ", req.params.imageId);
+    helper.statsdClient.increment('DELETE_image_counter');
     let id = req.params.imageId;
     try {
         let data = await db.image.findOne({
@@ -109,20 +118,23 @@ const delImage = async (req, res) => {
         var params = { Bucket: BUCKET_NAME, Key: bucketPath };
 
         await s3.deleteObject(params).promise();
+
         await db.image.destroy({
             where:{
                 image_id:id
             }
         })
-
+        helper.logger.info("Image Successfully deleted");
         return res.status(204).send(); 
     }catch(err) {
-        console.log("DB Error ", err);
+        helper.logger.error("DB Error - ", err);
         res.status(400).send("Bad Request");
     }
 }
 
 const getAllImages = async (req, res) => {
+    helper.logger.info("GET -All Image for product id - ", req.params.id);
+    helper.statsdClient.increment('GET_all_image_counter');
     let id = req.params.id;
 
     try {
@@ -138,7 +150,7 @@ const getAllImages = async (req, res) => {
             delete res.dataValues.date_last_updated
             result.push(res.dataValues);
         });
-
+        helper.logger.info("Image Successfully fetched - ", );
         return res.status(200).json(result); 
     }catch(err) {
         console.log("DB Error ", err);

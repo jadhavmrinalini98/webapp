@@ -12,3 +12,5 @@ cd /home/ec2-user/webapp
 npm i
 
 sudo cp ./packer/webapp.service /etc/systemd/system/
+
+sudo yum install amazon-cloudwatch-agent -y
