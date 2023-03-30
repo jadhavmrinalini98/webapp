@@ -1,8 +1,10 @@
 const util = require("util");
 const multer = require("multer");
 
+let key;
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    key = req;
     cb(null, __dirname + "/../assets");
   },
   filename: (req, file, cb) => {
