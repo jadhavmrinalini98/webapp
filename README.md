@@ -88,8 +88,8 @@ Step 4: Check the Database after each and every API is called to see the status 
 Step 5: Verify the status codes returned by API as per requirements 
 
 
-## Test the Service
-To check the service is up and running check:
+## Test the Service:
+To check the service is up and running check the following:
 
 http://localhost:3000/healthz/, where you should see: "200 OK".
 
