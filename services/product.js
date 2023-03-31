@@ -14,7 +14,7 @@ const createNewProduct = async (req, res) => {
     !req.body.manufacturer ||
     req.body.quantity===null ||
     (req.body.quantity && (req.body.quantity < 0 || typeof req.body.quantity === 'string' || req.body.quantity > 100))) {
-        helper.logger.error("Bad request. Check(s) failed. - ", req.body);
+        helper.logger.error("Bad request. Check(s) failed.: ", req.body);
         return res.status(400).json({
             message: "Bad request"
         });
@@ -23,7 +23,7 @@ const createNewProduct = async (req, res) => {
     try{
         let prodObj = await db.product.findOne({where:{sku:req.body.sku}});
         if(prodObj) {
-            helper.logger.error("Bad request!! The entered sku value already exists. - ", req.body.sku);
+            helper.logger.error("Bad request!! The entered sku value already exists: ", req.body.sku);
             return res.status(400).json({
                 message: "Bad request!! The entered sku value already exists."
             });
@@ -55,16 +55,16 @@ const createNewProduct = async (req, res) => {
             "date_last_updated": data.dataValues.date_last_updated,
             "owner_user_id": data.dataValues.owner_user_id
         }
-        helper.logger.info("Product Successfully added - ", result);
+        helper.logger.info("Product added successfully! ", result);
         return res.status(201).json(result);
     }catch(err) {
-        helper.logger.error("DB Error - ", err);
+        helper.logger.error("DB Error: ", err);
         res.status(400).send("Bad Request");
     }
 }
 
 const putProductInfo = async (req, res) => {
-    helper.logger.info("PUT - Product for id - ", req.params.id);
+    helper.logger.info("PUT - Product for id:  ", req.params.id);
     helper.statsdClient.increment('PUT_product');
 
     if(!req.body.name || 
@@ -74,7 +74,7 @@ const putProductInfo = async (req, res) => {
     req.body.quantity===null ||
     (req.body.quantity && (req.body.quantity < 0 || typeof req.body.quantity === 'string' || req.body.quantity > 100)) ||
     Object.keys(req.body).length > 5) {
-        helper.logger.error("Bad request. Checks failed - ",req.body);
+        helper.logger.error("Bad request. Checks failed: ",req.body);
         return res.status(400).json({
             message: "Bad request"
         });
@@ -85,7 +85,7 @@ const putProductInfo = async (req, res) => {
     try{
         let prodObj = await db.product.findOne({where:{sku:req.body.sku}});
         if(prodObj && prodObj.dataValues.id != id) {
-            helper.logger.error("Bad request!! The entered sku value already exists. - ", req.body.sku);
+            helper.logger.error("Bad request!! The entered sku value already exists: ", req.body.sku);
             return res.status(400).json({
                 message: "Bad request!! The entered sku value already exists."
             });
@@ -104,7 +104,7 @@ const putProductInfo = async (req, res) => {
                 id:id
             }
         })
-        helper.logger.info("Product Successfully updated");
+        helper.logger.info("Product updated successfully!");
         return res.status(204).send(); 
     }catch(err) {
         helper.logger.error("DB Error - ", err);
@@ -113,11 +113,11 @@ const putProductInfo = async (req, res) => {
 }
 
 const patchProductInfo = async (req, res) => {
-    helper.logger.info("PATCH - Product for id - ", req.params.id);
+    helper.logger.info("PATCH - Product for id: ", req.params.id);
     helper.statsdClient.increment('PATCH_product');
 
     if((req.body.quantity && (req.body.quantity < 0 || typeof req.body.quantity === 'string' || req.body.quantity > 100))) {
-        helper.logger.error("Bad request. Incorrect quantity value - ",req.body.quantity);
+        helper.logger.error("Bad request. Incorrect quantity value: ",req.body.quantity);
         return res.status(400).json({
             message: "Bad request"
         });
@@ -139,7 +139,7 @@ const patchProductInfo = async (req, res) => {
     });
 
     if(!Object.keys(fieldData).length || nullCheck) {
-        helper.logger.error("Bad request. Incorrect data - ",req.body);
+        helper.logger.error("Bad request. Incorrect data: ",req.body);
         return res.status(400).send("Bad Request. Incorrect data.");
     }
 
@@ -147,7 +147,7 @@ const patchProductInfo = async (req, res) => {
         if(req.body.sku) {
             let prodObj = await db.product.findOne({where:{sku:req.body.sku}});
             if(prodObj && prodObj.dataValues.id != id) {
-                helper.logger.error("Bad request!! The entered sku value already exists. - ", req.body.sku);
+                helper.logger.error("Bad request!! The entered sku value already exists.: ", req.body.sku);
                 return res.status(400).json({
                     message: "Bad request!! The entered sku value already exists."
                 });
@@ -161,7 +161,7 @@ const patchProductInfo = async (req, res) => {
                 id:id
             }
         })
-        helper.logger.info("Product Successfully updated");
+        helper.logger.info("Product updated successfully!");
         return res.status(204).send(); 
     }catch(err) {
         helper.logger.error("DB Error - ", err);
@@ -170,7 +170,7 @@ const patchProductInfo = async (req, res) => {
 }
 
 const deleteProduct = async (req, res) => {
-    helper.logger.info("DELETE - Product for id - ", req.params.id);
+    helper.logger.info("DELETE - Product for id: ", req.params.id);
     helper.statsdClient.increment('DELETE_product');
 
     if(req._body) {
@@ -200,7 +200,7 @@ const deleteProduct = async (req, res) => {
                 id:id
             }
         });
-        helper.logger.info("Product Successfully deleted");
+        helper.logger.info("Product deleted successfully!");
         return res.status(204).send(); 
     }catch(err) {
         helper.logger.error("DB Error - ", err);
@@ -209,7 +209,7 @@ const deleteProduct = async (req, res) => {
 }
 
 const getProduct = async(req, res) => {
-    helper.logger.info("GET - Product for id - ", req.params.id);
+    helper.logger.info("GET - Product for id: ", req.params.id);
     helper.statsdClient.increment('GET_product');
     if(req._body) {
         helper.logger.error("Bad request. Request body present.");
@@ -241,7 +241,7 @@ const getProduct = async(req, res) => {
             "date_last_updated": data.dataValues.date_last_updated,
             "owner_user_id": data.dataValues.owner_user_id
         }
-        helper.logger.info("Product Successfully fetched");
+        helper.logger.info("Product fetched successfully!");
         return res.status(200).json(result); 
     }catch(err) {
         helper.logger.error("DB Error - ", err);
