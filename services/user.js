@@ -65,7 +65,7 @@ const createNewUser = async ( req, res) => {
             account_created:data.dataValues.account_created,
             account_updated:data.dataValues.account_updated
         }
-        helper.logger.info("User Successfully added");
+        helper.logger.info("User added successfully!");
         return res.status(201).json(result);
     }catch(err) {
         helper.logger.error("DB Error", err);
@@ -107,7 +107,7 @@ const getUser = async (req, res) => {
             account_created:result.account_created,
             account_updated:result.account_updated
         }
-        helper.logger.info("User Successfully fetched");
+        helper.logger.info("User fetched successfully!");
         return res.status(200).json(fResult); 
     }catch(err) {
         helper.logger.error("DB Error", err);
@@ -116,7 +116,7 @@ const getUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-    helper.logger.info(`UPDATE - user for id - ${req.params.id}.`);
+    helper.logger.info(`UPDATE - user for id: ${req.params.id}.`);
     helper.statsdClient.increment('POST_user');
     //Check if req object is correct and throw err as approriate
     let check = true;
@@ -164,7 +164,7 @@ const updateUser = async (req, res) => {
                 id:id
             }
         });
-        helper.logger.info("User Successfully updated");
+        helper.logger.info("User updated successfully!");
         return res.status(204).send(); 
     }catch(err) {
         helper.logger.error("DB Error", err);
