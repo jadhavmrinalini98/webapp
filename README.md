@@ -19,9 +19,9 @@ Application must return 400 Bad Request HTTP response code when a user account w
 10. Get user information
 As a user, I want to get my account information. Response payload should return all fields for the user except for password.
 
-## Prerequisites
+## Prerequisites:
 
-1.Visual studio code (IDE)
+1.VSCode (IDE)
 2.POSTMAN
 3.Database - MySQL
 4.Node.js
