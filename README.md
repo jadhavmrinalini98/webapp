@@ -104,6 +104,7 @@ http://localhost:3000/v1/product/self where you should see: "204 No Content".
 http://localhost:3000/v1/product/self where you should use: "204 No Content".
 
 
-#Packer file
-## Contributing
-Contributions are always welcome. Please create a pull request with a detailed description of changes.
+Command to import certificate to AWS Certificate Manager
+
+    aws acm import-certificate --certificate fileb://certificate.crt --private-key fileb://private.key --profile=demo
+  
