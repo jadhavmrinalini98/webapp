@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 
 const createProductModel = (sequelize) => {
-    let User = sequelize.define("product", {
+    let Product = sequelize.define("product", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -35,10 +35,6 @@ const createProductModel = (sequelize) => {
         date_last_updated: {
             type: DataTypes.DATE,
             allowNull: false
-        },
-        owner_user_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false
         }
     },
     {
@@ -49,7 +45,7 @@ const createProductModel = (sequelize) => {
         initialAutoIncrement: 1,
     });
 
-    return User;
+    return Product;
 }
 
 module.exports = createProductModel;

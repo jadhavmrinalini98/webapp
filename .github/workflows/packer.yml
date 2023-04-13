@@ -1,7 +1,7 @@
 name: Packer
 
 on:
-  push:
+  pull_request:
     branches: [main]
 
   workflow_dispatch:
@@ -13,14 +13,40 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      PKR_VAR_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      PKR_VAR_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
       - name: Create zip archive
         run: zip -r webapp.zip .
       - name: Install Packer
-        run: sudo apt-get update && sudo apt-get install -y packer
+        run:  sudo apt-get update && sudo apt-get install -y packer && cd packer && pwd
+        
       - name: Packer Init
         run: packer init packer
       - name: Packer Build - Branches
         run: packer build packer
+      - name: Set AWS Demo credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEMO}}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEMO }}
+          aws-profile: demo
+          aws-region: us-east-1
+      - name: Copying ami Artifacts and Launching Template
+        working-directory: ./packer
+      
+        run: |
+          pwd
+          ls 
+          AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+          echo $AMI_ID
+          LT_ID=$(aws ec2 describe-launch-templates --launch-template-name launch_template | jq '.LaunchTemplates[].LaunchTemplateId')
+          LT_ID="${LT_ID%\"}"
+          LT_ID="${LT_ID#\"}"
+          echo $LT_ID
+          aws ec2 create-launch-template-version --launch-template-id $LT_ID --version-description WebVersion2 --source-version 1 --launch-template-data "ImageId=$AMI_ID"
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name asg_launch_config --launch-template LaunchTemplateId=$LT_ID,Version='$Latest'
+      - name: Refreshing Instances
+        run: aws autoscaling start-instance-refresh --auto-scaling-group-name asg_launch_config
