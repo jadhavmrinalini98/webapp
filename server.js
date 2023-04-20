@@ -20,7 +20,7 @@ app.get('/healthz',function(req, res) {
   helper.statsdClient.increment('health_counter');
   res.status(200).send(); 
 });
-app.get('/health',function(req, res) {
+app.get('/mrinalini',function(req, res) {
   helper.statsdClient.increment('health_counter');
   res.status(200).send(); 
 });
